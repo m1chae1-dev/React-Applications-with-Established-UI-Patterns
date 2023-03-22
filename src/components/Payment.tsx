@@ -8,9 +8,9 @@ interface Props {
     amount: number
 }
 
-const Payment: React.FC<Props> = ({ amount }) => {
+const usePaymentMethods = () => {
     const [paymentMethods, setPaymentMethods] = useState<LocalPaymentMethod[]>([])
-    
+
     useEffect(() => {
         const fetchPaymentMethods = async () => {
             const url = "https://dummyjson.com/users"
@@ -32,13 +32,20 @@ const Payment: React.FC<Props> = ({ amount }) => {
 
         fetchPaymentMethods()
     }, [])
+
+    return {
+        paymentMethods
+    }
+}
+
+const Payment: React.FC<Props> = ({ amount }) => {
+    const { paymentMethods } = usePaymentMethods()
+    
     return (
         <div>
             <div className='payment_product_container'>
                 <h3>Order Details</h3>
-                <div>
-                    <Products />
-                </div>
+                <Products />
             </div>
             <div className='payment_container'>
                 <h3>Payment</h3>
