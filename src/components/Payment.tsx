@@ -38,6 +38,22 @@ const usePaymentMethods = () => {
     }
 }
 
+const PaymentMethods = ({paymentMethods}: {paymentMethods :LocalPaymentMethod[]}) => (
+    <div className='payment_types'>
+        {paymentMethods.slice(28,31).map((method) => (
+            <label key={method.provider}>
+                <input
+                    type="radio"
+                    name="payment"
+                    value={method.provider}
+                    defaultChecked={method.provider === "cash"}
+                />
+                <span>{method.label}</span>
+            </label>
+        ))}
+    </div>
+)
+
 const Payment: React.FC<Props> = ({ amount }) => {
     const { paymentMethods } = usePaymentMethods()
     
@@ -50,17 +66,7 @@ const Payment: React.FC<Props> = ({ amount }) => {
             <div className='payment_container'>
                 <h3>Payment</h3>
                 <div className='payment_types'>
-                    {paymentMethods.slice(28,31).map((method) => (
-                        <label key={method.provider}>
-                            <input
-                                type="radio"
-                                name="payment"
-                                value={method.provider}
-                                defaultChecked={method.provider === "cash"}
-                            />
-                            <span>{method.label}</span>
-                        </label>
-                    ))}
+                    <PaymentMethods paymentMethods={paymentMethods} />
                 </div>
                 <hr />
                 <button className='payment_btn'>${amount}</button>
