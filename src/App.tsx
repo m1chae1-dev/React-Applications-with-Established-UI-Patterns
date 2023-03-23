@@ -2,11 +2,12 @@ import Payment from './components/Payment'
 import './App.css'
 
 const App: React.FC = () => {
-  const productAmount = 19.80
+  const productAmount = 3312
+  const currentCountry = "JP"
 
   return (
     <div className="App">
-      <Payment amount={productAmount} />
+      <Payment amount={productAmount} countryCode={currentCountry} />
     </div>
   )
 }

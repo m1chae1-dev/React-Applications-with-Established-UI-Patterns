@@ -10,13 +10,14 @@ import "../styles/payment.css"
 
 interface Props {
     amount: number
+    countryCode: string
 }
 
-const Payment: React.FC<Props> = ({ amount }) => {
+const Payment: React.FC<Props> = ({ amount, countryCode }) => {
     const { paymentMethods } = usePaymentMethods()
     const { formatCheckboxLabel } = FormatDonationCheckbox()
 
-    const { total, tip, agreeToDonate, updateAgreeToDonate } = useRoundUp(amount)
+    const { total, tip, agreeToDonate, updateAgreeToDonate } = useRoundUp(amount, countryCode)
 
     return (
         <div>
@@ -37,11 +38,14 @@ const Payment: React.FC<Props> = ({ amount }) => {
                         <DonationCheckbox 
                             onChange={updateAgreeToDonate}
                             checked={agreeToDonate}
-                            content={formatCheckboxLabel(agreeToDonate, tip)}
+                            content={formatCheckboxLabel(agreeToDonate, tip, countryCode)}
                         />
                     </label>
                 </div>
-                <button className='payment_btn'>${total}</button>
+                <button className='payment_btn'>
+                    {countryCode === "JP" ? "¥" : "$"}
+                    {total}
+                </button>
             </div>
         </div>
     )
