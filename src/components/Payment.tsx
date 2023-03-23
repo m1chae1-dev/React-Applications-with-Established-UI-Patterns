@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import usePaymentMethods from '../hooks/usePaymentMethods';
 import PaymentMethods from '../components/PaymentMethods'
 import Products from './Products';
@@ -10,7 +10,17 @@ interface Props {
 }
 
 const Payment: React.FC<Props> = ({ amount }) => {
+    const [agreeToDonate, setAgreeToDonate] = useState<boolean>(false)
     const { paymentMethods } = usePaymentMethods()
+
+    const { total, tip } = useMemo(() => ({
+        total: agreeToDonate ? Math.floor(amount + 1) : amount,
+        tip: parseFloat((Math.floor(amount + 1) -  amount).toPrecision(10)),
+    }), [amount, agreeToDonate])
+
+    const handleChange = (e: any) => {
+        setAgreeToDonate(e.target)
+    }
 
     return (
         <div>
@@ -26,7 +36,21 @@ const Payment: React.FC<Props> = ({ amount }) => {
                     <PaymentMethods paymentMethods={paymentMethods} />
                 </div>
                 <hr />
-                <button className='payment_btn'>${amount}</button>
+                <div>
+                    <label>
+                        <input 
+                            type="checkbox"
+                            onChange={handleChange}
+                            checked={agreeToDonate}
+                        />
+                        <p>
+                            {agreeToDonate
+                                ? "Thanks for your donation."
+                                : `I would like to donate $${tip} to charity.`}
+                        </p>
+                    </label>
+                </div>
+                <button className='payment_btn'>${total}</button>
             </div>
         </div>
     )
