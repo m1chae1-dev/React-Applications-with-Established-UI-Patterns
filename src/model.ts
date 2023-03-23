@@ -1,8 +1,7 @@
 export interface LocalPaymentMethod {
     label: string
     provider: string
+    isDefaultMethod: boolean
 }
 
-export interface RemotePaymentMethod {
-    users: Array<any>
-}
+export type RemotePaymentMethod = any
