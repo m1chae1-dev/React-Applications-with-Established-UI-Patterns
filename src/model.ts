@@ -5,3 +5,9 @@ export interface LocalPaymentMethod {
 }
 
 export type RemotePaymentMethod = any
+
+export interface DonationCheckboxProps {
+    onChange: any
+    checked: any
+    content: any
+}

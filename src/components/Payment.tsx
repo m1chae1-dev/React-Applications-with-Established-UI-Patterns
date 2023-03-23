@@ -1,6 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import usePaymentMethods from '../hooks/usePaymentMethods';
+import useRoundUp from '../hooks/useRoundUp';
 import PaymentMethods from '../components/PaymentMethods'
+import FormatDonationCheckbox from './FormatDonationCheckbox';
+import DonationCheckbox from './DonationCheckbox';
 import Products from './Products';
 
 import "../styles/payment.css"
@@ -10,17 +13,10 @@ interface Props {
 }
 
 const Payment: React.FC<Props> = ({ amount }) => {
-    const [agreeToDonate, setAgreeToDonate] = useState<boolean>(false)
     const { paymentMethods } = usePaymentMethods()
+    const { formatCheckboxLabel } = FormatDonationCheckbox()
 
-    const { total, tip } = useMemo(() => ({
-        total: agreeToDonate ? Math.floor(amount + 1) : amount,
-        tip: parseFloat((Math.floor(amount + 1) -  amount).toPrecision(10)),
-    }), [amount, agreeToDonate])
-
-    const handleChange = (e: any) => {
-        setAgreeToDonate(e.target)
-    }
+    const { total, tip, agreeToDonate, updateAgreeToDonate } = useRoundUp(amount)
 
     return (
         <div>
@@ -38,16 +34,11 @@ const Payment: React.FC<Props> = ({ amount }) => {
                 <hr />
                 <div>
                     <label>
-                        <input 
-                            type="checkbox"
-                            onChange={handleChange}
+                        <DonationCheckbox 
+                            onChange={updateAgreeToDonate}
                             checked={agreeToDonate}
+                            content={formatCheckboxLabel(agreeToDonate, tip)}
                         />
-                        <p>
-                            {agreeToDonate
-                                ? "Thanks for your donation."
-                                : `I would like to donate $${tip} to charity.`}
-                        </p>
                     </label>
                 </div>
                 <button className='payment_btn'>${total}</button>
